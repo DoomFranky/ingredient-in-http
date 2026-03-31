@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.temporal.Temporal;
 
 import org.springframework.stereotype.Component;
 
 import hei.school.ingredient_again_why.DataSource;
+import hei.school.ingredient_again_why.Entity.Unit_type;
 
 @Component
 public class IngredientRepository {
@@ -46,12 +48,14 @@ public class IngredientRepository {
         }
     }
 
-    public ResultSet getStockByIngredientId (Integer id) {
+    public ResultSet getStockByIngredientId (Integer id,Temporal at, Unit_type unit) {
         try (Connection connection = dataSource.getDataSourceConnection()){
             PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT sm.id stock_id, quantity, type, unit, creation_datetime FROM \"StockMouvement\" AS sm WHERE id_ingredient = ?"
+                "SELECT sm.id stock_id, quantity, type, unit, creation_datetime FROM \"StockMouvement\" AS sm WHERE id_ingredient = ? AND creation_datetime <= ? AND unit = ? "
             );
             preparedStatement.setInt(1, id);
+            preparedStatement.setObject(2, at);
+            preparedStatement.setString(3, unit.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             dataSource.closeTheConnection(connection);
             return resultSet;

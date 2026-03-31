@@ -61,8 +61,8 @@ public class IngredientService {
         return ingredient;
     }
 
-    public List<StockMouvement> getStockByIngredientsId(Integer id,Temporal at, MovementTypeEnum unit) {
-        ResultSet resultSet = ingredientRepository.getStockByIngredientId(id);
+    public List<StockMouvement> getStockByIngredientsId(Integer id,Temporal at, Unit_type unit) {
+        ResultSet resultSet = ingredientRepository.getStockByIngredientId(id,at,unit);
         List<StockMouvement> stockMouvements = new ArrayList<>();
         try {
             if (at == null || unit == null) {

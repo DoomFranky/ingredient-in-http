@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hei.school.ingredient_again_why.Entity.Ingredients;
 import hei.school.ingredient_again_why.Entity.MovementTypeEnum;
 import hei.school.ingredient_again_why.Entity.StockMouvement;
+import hei.school.ingredient_again_why.Entity.Unit_type;
 import hei.school.ingredient_again_why.Exception.IngredientExceptionMissingParams;
 import hei.school.ingredient_again_why.Exception.IngredientExceptionNotFound;
 import hei.school.ingredient_again_why.Service.IngredientService;
@@ -53,7 +54,7 @@ public class IngredientController {
     }
 
     @GetMapping("/ingredients/{id}/stock")
-    public ResponseEntity<?> getIngredientStockById(@PathVariable Integer id,@RequestParam Temporal at,@RequestParam MovementTypeEnum unit){
+    public ResponseEntity<?> getIngredientStockById(@PathVariable Integer id,@RequestParam Temporal at,@RequestParam Unit_type unit){
         List<StockMouvement> listOfStock = ingredientService.getStockByIngredientsId(id,at,unit);
 
         try {
