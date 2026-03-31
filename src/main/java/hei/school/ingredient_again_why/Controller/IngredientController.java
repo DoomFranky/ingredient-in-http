@@ -22,7 +22,12 @@ public class IngredientController {
             return ResponseEntity
                 .status(200)
                 .body(listOfIngredient);
-        } catch (Exception e) {
+        } catch (IngredientExceptionNotFound e) {
+            return ResponseEntity
+                .status(404)
+                .body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(500)
                 .body(e.getMessage());
         } 
@@ -33,9 +38,6 @@ public class IngredientController {
         Ingredients ingredient = ingredientService.getIngredientsById(id);
           
         try {
-            if (ingredient==null) {
-                throw new IngredientExceptionNotFound("Ingredient.id={"+id+"} is not found");
-            }
             return ResponseEntity
                 .status(200)
                 .body(ingredient);

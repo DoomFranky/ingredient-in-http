@@ -13,6 +13,7 @@ import hei.school.ingredient_again_why.Entity.MovementTypeEnum;
 import hei.school.ingredient_again_why.Entity.StockMouvement;
 import hei.school.ingredient_again_why.Entity.StockValue;
 import hei.school.ingredient_again_why.Entity.Unit_type;
+import hei.school.ingredient_again_why.Exception.IngredientExceptionNotFound;
 import hei.school.ingredient_again_why.Repository.IngredientRepository;
 
 @Component
@@ -40,20 +41,22 @@ public class IngredientService {
 
     public Ingredients getIngredientsById (Integer id){
         ResultSet resultSet = ingredientRepository.getIngredientsResultSetById(id);
-        Ingredients ingredients =  new Ingredients();
+        Ingredients ingredient =  new Ingredients();
         try {
-            if(resultSet.next()){
-                Ingredients ingredient = new Ingredients();
+            if (resultSet.next()) {
                 ingredient.setId(resultSet.getInt("ingredient_id"));
                 ingredient.setName(resultSet.getString("ingredient_name"));
                 ingredient.setPrice(resultSet.getDouble("ingredient_price"));
                 ingredient.setCategory(CategoryEnum.valueOf(resultSet.getString("ingredient_category")));
                 ingredient.setStockMouvementList(getStockByIngredientsId(resultSet.getInt("ingredient_id")));
             }
+            if(ingredient.getId()==null){
+                throw new IngredientExceptionNotFound("Ingredient.id={"+id+"} is not found");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return ingredients;
+        return ingredient;
     }
 
     public List<StockMouvement> getStockByIngredientsId(Integer id) {
