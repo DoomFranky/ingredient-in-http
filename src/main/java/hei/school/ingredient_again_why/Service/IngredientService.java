@@ -28,7 +28,7 @@ public class IngredientService {
                 ingredient.setId(resultSet.getInt("ingredient_id"));
                 ingredient.setName(resultSet.getString("ingredient_name"));
                 ingredient.setPrice(resultSet.getDouble("ingredient_price"));
-                CategoryEnum.valueOf(resultSet.getString("ingredient_category"));
+                ingredient.setCategory(CategoryEnum.valueOf(resultSet.getString("ingredient_category")));
                 ingredient.setStockMouvementList(null);
                 listOfIngredients.add(ingredient);
             }
@@ -47,7 +47,7 @@ public class IngredientService {
                 ingredient.setId(resultSet.getInt("ingredient_id"));
                 ingredient.setName(resultSet.getString("ingredient_name"));
                 ingredient.setPrice(resultSet.getDouble("ingredient_price"));
-                CategoryEnum.valueOf(resultSet.getString("ingredient_category"));
+                ingredient.setCategory(CategoryEnum.valueOf(resultSet.getString("ingredient_category")));
                 ingredient.setStockMouvementList(getStockByIngredientsId(resultSet.getInt("ingredient_id")));
             }
         } catch (SQLException e) {
