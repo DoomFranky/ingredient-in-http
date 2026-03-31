@@ -2,6 +2,8 @@ package hei.school.ingredient_again_why.Entity;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Ingredients {
     private Integer id;
     private String name;
@@ -43,6 +45,7 @@ public class Ingredients {
     public void setCategory(CategoryEnum category) {
         this.category = category;
     }
+    @JsonIgnore
     public List<StockMouvement> getStockMouvementList() {
         return stockMouvementList;
     }
