@@ -2,6 +2,7 @@ package hei.school.ingredient_again_why.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import hei.school.ingredient_again_why.Entity.MovementTypeEnum;
 import hei.school.ingredient_again_why.Entity.StockMouvement;
 import hei.school.ingredient_again_why.Entity.StockValue;
 import hei.school.ingredient_again_why.Entity.Unit_type;
+import hei.school.ingredient_again_why.Exception.IngredientExceptionMissingParams;
 import hei.school.ingredient_again_why.Exception.IngredientExceptionNotFound;
 import hei.school.ingredient_again_why.Repository.IngredientRepository;
 
@@ -48,7 +50,7 @@ public class IngredientService {
                 ingredient.setName(resultSet.getString("ingredient_name"));
                 ingredient.setPrice(resultSet.getDouble("ingredient_price"));
                 ingredient.setCategory(CategoryEnum.valueOf(resultSet.getString("ingredient_category")));
-                ingredient.setStockMouvementList(getStockByIngredientsId(resultSet.getInt("ingredient_id")));
+                ingredient.setStockMouvementList(null);
             }
             if(ingredient.getId()==null){
                 throw new IngredientExceptionNotFound("Ingredient.id={"+id+"} is not found");
@@ -59,10 +61,13 @@ public class IngredientService {
         return ingredient;
     }
 
-    public List<StockMouvement> getStockByIngredientsId(Integer id) {
+    public List<StockMouvement> getStockByIngredientsId(Integer id,Temporal at, MovementTypeEnum unit) {
         ResultSet resultSet = ingredientRepository.getStockByIngredientId(id);
         List<StockMouvement> stockMouvements = new ArrayList<>();
         try {
+            if (at == null || unit == null) {
+                throw new IngredientExceptionMissingParams("Either mandatory query parameter `at` or `unit` is not provided.");
+            }
             while(resultSet.next()){
                 StockMouvement stockMouvement = new StockMouvement();
                 stockMouvement.setId(resultSet.getInt("stock_id"));
@@ -70,6 +75,9 @@ public class IngredientService {
                 stockMouvement.setType(MovementTypeEnum.valueOf(resultSet.getString("type")));
                 stockMouvement.setCreationDateTime(resultSet.getTimestamp("creation_datetime").toInstant());
                 stockMouvements.add(stockMouvement);
+            }
+            if (stockMouvements.getFirst()==null) {
+                throw new IngredientExceptionNotFound("Ingredient.id={"+id+"} is not found");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

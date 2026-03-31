@@ -1,13 +1,18 @@
 package hei.school.ingredient_again_why.Controller;
 
+import java.time.temporal.Temporal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hei.school.ingredient_again_why.Entity.Ingredients;
+import hei.school.ingredient_again_why.Entity.MovementTypeEnum;
+import hei.school.ingredient_again_why.Entity.StockMouvement;
+import hei.school.ingredient_again_why.Exception.IngredientExceptionMissingParams;
 import hei.school.ingredient_again_why.Exception.IngredientExceptionNotFound;
 import hei.school.ingredient_again_why.Service.IngredientService;
 
@@ -22,10 +27,6 @@ public class IngredientController {
             return ResponseEntity
                 .status(200)
                 .body(listOfIngredient);
-        } catch (IngredientExceptionNotFound e) {
-            return ResponseEntity
-                .status(404)
-                .body(e.getMessage());
         }
         catch (Exception e) {
             return ResponseEntity.status(500)
@@ -41,14 +42,36 @@ public class IngredientController {
             return ResponseEntity
                 .status(200)
                 .body(ingredient);
+        } catch (IngredientExceptionNotFound e) {
+            return ResponseEntity
+                .status(404)
+                .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(500)
                 .body(e.getMessage());
         }
     }
 
-    public ResponseEntity<?> getIngredientStockById(){
-        throw new RuntimeException("methode not implemented");
+    @GetMapping("/ingredients/{id}/stock")
+    public ResponseEntity<?> getIngredientStockById(@PathVariable Integer id,@RequestParam Temporal at,@RequestParam MovementTypeEnum unit){
+        List<StockMouvement> listOfStock = ingredientService.getStockByIngredientsId(id,at,unit);
+
+        try {
+            return ResponseEntity
+                .status(200)
+                .body(listOfStock);
+        } catch (IngredientExceptionNotFound e) {
+            return ResponseEntity
+                .status(404)
+                .body(e.getMessage());
+        } catch (IngredientExceptionMissingParams e){
+            return ResponseEntity
+                .status(400)
+                .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                .body(e.getMessage());
+        }
     }
 
 }
