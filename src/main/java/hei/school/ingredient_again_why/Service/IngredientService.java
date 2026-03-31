@@ -62,12 +62,12 @@ public class IngredientService {
     }
 
     public List<StockMouvement> getStockByIngredientsId(Integer id,Temporal at, Unit_type unit) {
+        if (at == null || unit == null) {
+            throw new IngredientExceptionMissingParams("Either mandatory query parameter `at` or `unit` is not provided.");
+        }
         ResultSet resultSet = ingredientRepository.getStockByIngredientId(id,at,unit);
         List<StockMouvement> stockMouvements = new ArrayList<>();
         try {
-            if (at == null || unit == null) {
-                throw new IngredientExceptionMissingParams("Either mandatory query parameter `at` or `unit` is not provided.");
-            }
             while(resultSet.next()){
                 StockMouvement stockMouvement = new StockMouvement();
                 stockMouvement.setId(resultSet.getInt("stock_id"));
