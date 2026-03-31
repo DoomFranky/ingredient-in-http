@@ -1,4 +1,7 @@
 package hei.school.ingredient_again_why.Entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class DishIngredient {
     private Integer id;
     private Dish dish;
@@ -22,9 +25,11 @@ public class DishIngredient {
     public Integer getId() {
         return id;
     }
+    @JsonIgnore
     public Double getQuantity_require() {
         return quantity_require;
     }
+    @JsonIgnore
     public Unit_type getUnit_type() {
         return unit_type;
     }
@@ -38,7 +43,7 @@ public class DishIngredient {
         this.unit_type = unit_type;
     }
 
-
+    @JsonIgnore
     public Dish getDish() {
         return dish;
     }

@@ -2,6 +2,8 @@ package hei.school.ingredient_again_why.Entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Dish {
     private Integer id;
     private String name;
@@ -57,7 +59,7 @@ public class Dish {
     }
 
 
-
+    @JsonIgnore
     public List<Ingredients> getIngredients() {
         return ingredients.stream().map(i->i.getIngredeint()).collect(Collectors.toList());
     }
@@ -94,7 +96,7 @@ public class Dish {
         return "Dish [id=" + id + ", name=" + name + ", dishType=" + dishType + " ,dishPrice="+dishPrice+", ingredients=" + ingredients + "]";
     }
         
-
+    @JsonIgnore
     public Double getDishPrice() {
         return dishPrice;
     }

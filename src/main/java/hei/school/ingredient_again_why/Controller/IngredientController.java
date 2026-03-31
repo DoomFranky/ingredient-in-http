@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hei.school.ingredient_again_why.Entity.Ingredients;
-import hei.school.ingredient_again_why.Entity.MovementTypeEnum;
 import hei.school.ingredient_again_why.Entity.StockMouvement;
 import hei.school.ingredient_again_why.Entity.Unit_type;
 import hei.school.ingredient_again_why.Exception.IngredientExceptionMissingParams;
